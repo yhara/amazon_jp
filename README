@@ -1,0 +1,49 @@
+= amazon_jp gem
+
+Amazon.co.jpから情報を抜き出すなどします。
+
+== dependency
+
+Hpricotが必要(gem install hpricot)。
+そのうちNokogiriに移行するかも
+
+== usage
+
+ $ amazon_jp http://www.amazon.co.jp/dp/4839927847/
+ usage:
+   ...
+
+== reference
+
+=== class AmazonJP::Book
+
+.new(url) : amazonのURLから本オブジェクトを作る
+
+#url : String
+  URL
+
+#title : String
+  書名
+  #TODO: 未実装
+
+#buy_x_get_y : Book
+  あわせて買いたい。
+  #TODO: 該当がなかった場合どうなるか試してない
+
+#purchase_similarities : [Book]
+  この商品を買った人はこんな商品も買っています
+
+== why this library is made
+
+「あわせて買いたい」をスクレイピングするために作りました。
+
+スクレイピング操作は可能な限り遅延されます。
+例：Book.new(url) としただけではネットワークにアクセスせず、
+book.title が呼ばれたときに初めてスクレイピングを行います。
+
+== contact
+
+yhara(at)kmc.gr.jp
+http://route477.net/
+
+

@@ -1,0 +1,45 @@
+#!/usr/bin/env ruby
+$LOAD_PATH.unshift File.expand_path("../lib", File.dirname(__FILE__))
+require 'rubygems'
+require 'amazon_jp'
+#require 'optparse'
+#
+#opts = {}
+#opt = OptionParser.new{|o|
+#  o.on(""
+#
+#}
+#opt.parse!(ARGV)
+
+if ARGV.size == 0 || ARGV.include?("-h") || ARGV.include?("--help")
+  puts <<-EOD
+  usage: #{$0} url options
+  options: -t : title
+           -b : buy x get y
+           -s : purchase similarities
+  EOD
+else
+  url = ARGV.shift
+  book = AmazonJP::Book.new(url)
+  ARGV.each do |opt|
+    case opt
+    when "-t"
+      puts book.title
+    when "-b"
+      puts book.buy_x_get_y.title
+      puts book.buy_x_get_y.url
+    when "-s"
+      book.purchase_similarities.each do |sim|
+        puts sim.title
+        puts sim.url
+      end
+    else
+      raise "unknown option #{opt}"
+    end
+  end
+
+end
+
+
+
+

@@ -32,7 +32,8 @@ module AmazonJP
       end
     end
     lazy_attr :parser
-    lazy_attr :title, :bxgy
+    lazy_attr :title
+    lazy_attr :buy_x_get_y, :purchase_similarities
 
     def calculate_parser
       open(@url) do |f|
@@ -41,7 +42,7 @@ module AmazonJP
     end
 
     def method_missing(name, *args)
-      if self.respond_to?(name)
+      if name.to_s =~ /calculate_(.*)/ and parser.respond_to?($1)
         parser.__send__($1, *args)
       else
         super
@@ -50,7 +51,7 @@ module AmazonJP
 
     # should be override whenerver you use method_missing
     def respond_to?(name)
-      name =~ /calculate_(.*)/ and parser.respond_to?($1)
+      name.to_s =~ /calculate_(.*)/ and parser.respond_to?($1)
     end
 
     class Parser

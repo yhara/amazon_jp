@@ -37,12 +37,17 @@ module AmazonJP
       end
     end
 
-    def calculate_title
-      parser.title
+    def method_missing(name, *args)
+      if self.respond_to?(name)
+        parser.__send__($1, *args)
+      else
+        super
+      end
     end
 
-    def calculate_bxgy
-      parser.bxgy
+    # should be override whenerver you use method_missing
+    def respond_to?(name)
+      name =~ /calculate_(.*)/ and parser.respond_to?($1)
     end
 
     class Parser
@@ -53,14 +58,26 @@ module AmazonJP
         @doc = Hpricot(html.toutf8)
       end
 
-      def bxgy
-        para = @doc.search("p[@class=bxgy-text]").first
+      def buy_x_get_y
+        para = @doc.search("p.bxgy-text").first
         raise Error, "<p class='bxgy-text'> not found" if para.nil?
         link = para.search("a").first
 
         y = Book.new(link["href"])
         y.title = link.inner_text
         y
+      end
+
+      def purchase_similarities
+        table = @doc.search("table.sims-faceouts").first
+        raise Error, "<table class='sims-faceouts'> not found" if table.nil?
+        table.search("td").map{|td|
+          link = td.search("a")[1]
+          raise Error, "'a' tag not found" if link.nil?
+          b = Book.new(link["href"])
+          b.title = link.inner_text
+          b
+        }
       end
 
     end

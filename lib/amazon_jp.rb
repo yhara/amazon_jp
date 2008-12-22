@@ -25,8 +25,11 @@ module AmazonJP
   class Book
     extend LazyAttribute
 
-    def initialize(url)
+    def initialize(url, attrs={})
       @url = url
+      attrs.each do |attr, value|
+        self.__send__("#{attr}=", value)
+      end
     end
     lazy_attr :parser
     lazy_attr :title, :bxgy
@@ -63,9 +66,7 @@ module AmazonJP
         raise Error, "<p class='bxgy-text'> not found" if para.nil?
         link = para.search("a").first
 
-        y = Book.new(link["href"])
-        y.title = link.inner_text
-        y
+        Book.new(link["href"], :title => link.inner_text)
       end
 
       def purchase_similarities
@@ -74,9 +75,7 @@ module AmazonJP
         table.search("td").map{|td|
           link = td.search("a")[1]
           raise Error, "'a' tag not found" if link.nil?
-          b = Book.new(link["href"])
-          b.title = link.inner_text
-          b
+          Book.new(link["href"], :title => link.inner_text)
         }
       end
 

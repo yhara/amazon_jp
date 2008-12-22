@@ -31,6 +31,7 @@ module AmazonJP
         self.__send__("#{attr}=", value)
       end
     end
+    attr_reader :url
     lazy_attr :parser
     lazy_attr :title
     lazy_attr :buy_x_get_y, :purchase_similarities

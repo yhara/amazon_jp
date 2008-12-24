@@ -33,6 +33,9 @@ Hpricotが必要(gem install hpricot)。
 #purchase_similarities : [Book]
   この商品を買った人はこんな商品も買っています
 
+#rales_rank : Fixnum
+  本のランキング順位
+
 == why this library is made
 
 「あわせて買いたい」をスクレイピングするために作りました。

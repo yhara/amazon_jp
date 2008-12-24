@@ -18,4 +18,9 @@ describe AmazonJP::Book do
     sims.first.should be_kind_of(AmazonJP::Book)
   end
 
+  it "should extract 'sales rank'" do
+    rank = @book.sales_rank
+    rank.should be_kind_of(Integer)
+  end
+
 end

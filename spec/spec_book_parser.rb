@@ -22,4 +22,9 @@ describe AmazonJP::Book::Parser do
     sims.first.title.should == "ゲームプログラマになる前に覚えておきたい技術"
   end
 
+  it "should extract 'sales rank'" do
+    rank = @parser.sales_rank
+    rank.should == 1613
+  end
+
 end

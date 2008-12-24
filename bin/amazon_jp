@@ -17,6 +17,7 @@ if ARGV.size == 0 || ARGV.include?("-h") || ARGV.include?("--help")
   options: -t : title
            -b : buy x get y
            -s : purchase similarities
+           -r : sales rank
   EOD
 else
   url = ARGV.shift
@@ -33,6 +34,8 @@ else
         puts sim.title
         puts sim.url
       end
+    when "-r"
+      puts book.sales_rank
     else
       raise "unknown option #{opt}"
     end

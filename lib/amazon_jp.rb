@@ -34,7 +34,7 @@ module AmazonJP
     attr_reader :url
     lazy_attr :parser
     lazy_attr :title
-    lazy_attr :buy_x_get_y, :purchase_similarities
+    lazy_attr :buy_x_get_y, :purchase_similarities, :sales_rank
 
     def calculate_parser
       open(@url) do |f|
@@ -79,6 +79,14 @@ module AmazonJP
           raise Error, "'a' tag not found" if link.nil?
           Book.new(link["href"], :title => link.inner_text)
         }
+      end
+
+      def sales_rank
+        li = @doc.search("li#SalesRank").first
+        raise Error, "<li id='SalesRank'> not found" if li.nil?
+        rank = li.inner_text[/([\d,]+)位/, 1].gsub(/,/, "").to_i
+
+        rank
       end
 
     end
